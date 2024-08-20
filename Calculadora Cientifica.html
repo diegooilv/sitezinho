@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Científica</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .calculator {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 320px;
+        }
+        .display {
+            width: 100%;
+            height: 60px;
+            background-color: #333333;
+            color: #ffffff;
+            text-align: right;
+            padding: 15px;
+            font-size: 2em;
+            border-radius: 5px;
+            margin-bottom: 15px;
+        }
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+        }
+        .buttons button {
+            height: 50px;
+            font-size: 1.2em;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e90ff;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .buttons button:hover {
+            background-color: #1c7ed6;
+        }
+        .buttons button.function {
+            background-color: #ffa500;
+        }
+        .buttons button.function:hover {
+            background-color: #e69500;
+        }
+        .buttons button.equal {
+            grid-column: span 2;
+            background-color: #ff6347;
+        }
+        .buttons button.equal:hover {
+            background-color: #e5533f;
+        }
+    </style>
+</head>
+<body>
+
+<div class="calculator">
+    <div class="display" id="display">0</div>
+    <div class="buttons">
+        <button onclick="clearDisplay()">C</button>
+        <button onclick="deleteLast()">⌫</button>
+        <button onclick="appendToDisplay('(')">(</button>
+        <button onclick="appendToDisplay(')')">)</button>
+        
+        <button class="function" onclick="calculateTrig('sin')">sin</button>
+        <button class="function" onclick="calculateTrig('cos')">cos</button>
+        <button class="function" onclick="calculateTrig('tan')">tan</button>
+        <button onclick="appendToDisplay('/')">÷</button>
+        
+        <button class="function" onclick="calculateLog()">log</button>
+        <button class="function" onclick="calculateSqrt()">√</button>
+        <button class="function" onclick="calculatePow()">x²</button>
+        <button onclick="appendToDisplay('*')">×</button>
+        
+        <button onclick="appendToDisplay('7')">7</button>
+        <button onclick="appendToDisplay('8')">8</button>
+        <button onclick="appendToDisplay('9')">9</button>
+        <button onclick="appendToDisplay('-')">−</button>
+        
+        <button onclick="appendToDisplay('4')">4</button>
+        <button onclick="appendToDisplay('5')">5</button>
+        <button onclick="appendToDisplay('6')">6</button>
+        <button onclick="appendToDisplay('+')">+</button>
+        
+        <button onclick="appendToDisplay('1')">1</button>
+        <button onclick="appendToDisplay('2')">2</button>
+        <button onclick="appendToDisplay('3')">3</button>
+        <button class="equal" onclick="calculateResult()">=</button>
+        
+        <button onclick="appendToDisplay('0')">0</button>
+        <button onclick="appendToDisplay('.')">.</button>
+        <button class="equal" style="grid-column: span 2;" onclick="calculateResult()">=</button>
+    </div>
+</div>
+
+<script>
+    function clearDisplay() {
+        document.getElementById('display').innerText = '0';
+    }
+
+    function deleteLast() {
+        let display = document.getElementById('display').innerText;
+        if (display.length > 1) {
+            document.getElementById('display').innerText = display.slice(0, -1);
+        } else {
+            document.getElementById('display').innerText = '0';
+        }
+    }
+
+    function appendToDisplay(value) {
+        let display = document.getElementById('display').innerText;
+        if (display === '0') {
+            document.getElementById('display').innerText = value;
+        } else {
+            document.getElementById('display').innerText += value;
+        }
+    }
+
+    function calculateResult() {
+        let display = document.getElementById('display').innerText;
+        try {
+            document.getElementById('display').innerText = eval(display);
+        } catch {
+            document.getElementById('display').innerText = 'Erro';
+        }
+    }
+
+    function calculateTrig(func) {
+        let display = document.getElementById('display').innerText;
+        let value = parseFloat(display);
+        if (func === 'sin') {
+            document.getElementById('display').innerText = Math.sin(value);
+        } else if (func === 'cos') {
+            document.getElementById('display').innerText = Math.cos(value);
+        } else if (func === 'tan') {
+            document.getElementById('display').innerText = Math.tan(value);
+        }
+    }
+
+    function calculateLog() {
+        let display = document.getElementById('display').innerText;
+        let value = parseFloat(display);
+        document.getElementById('display').innerText = Math.log10(value);
+    }
+
+    function calculateSqrt() {
+        let display = document.getElementById('display').innerText;
+        let value = parseFloat(display);
+        document.getElementById('display').innerText = Math.sqrt(value);
+    }
+
+    function calculatePow() {
+        let display = document.getElementById('display').innerText;
+        let value = parseFloat(display);
+        document.getElementById('display').innerText = Math.pow(value, 2);
+    }
+</script>
+
+</body>
+</html>
