@@ -31,6 +31,8 @@
             font-size: 2em;
             border-radius: 5px;
             margin-bottom: 15px;
+            overflow-x: auto;
+            white-space: nowrap;
         }
         .buttons {
             display: grid;
@@ -132,7 +134,7 @@
     function calculateResult() {
         let display = document.getElementById('display').innerText;
         try {
-            document.getElementById('display').innerText = eval(display);
+            document.getElementById('display').innerText = eval(display.replace('÷', '/').replace('×', '*'));
         } catch {
             document.getElementById('display').innerText = 'Erro';
         }
