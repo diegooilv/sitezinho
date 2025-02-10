@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description"
+        content="Ferramenta online para sortear grupos de 16 times de forma rápida e simples para torneios, campeonatos ou competições esportivas. Organize seu torneio com facilidade!">
+    <title>Sorteio de Times em Grupos</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            font-size: 1.8rem;
+            margin: 20px 0;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 15px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .group {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+
+        .group:hover {
+            transform: translateY(-2px);
+        }
+
+        .group h3 {
+            color: var(--secondary-color);
+            margin: 0 0 15px 0;
+            font-size: 1.3rem;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #eee;
+        }
+
+        .group ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .group ul li {
+            padding: 8px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        #input-area {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 0 15px;
+        }
+
+        .input-wrapper {
+            position: relative;
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        #error-message {
+            text-align: center;
+            color: #e74c3c;
+            padding: 10px;
+            margin: 10px 0;
+            background-color: #f8d7da;
+            border-radius: 6px;
+            display: none;
+        }
+
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            input {
+                font-size: 0.95rem;
+            }
+
+            button {
+                padding: 12px;
+                font-size: 1rem;
+            }
+
+            .group h3 {
+                font-size: 1.2rem;
+            }
+        }
+
+        .instructions {
+            text-align: center;
+            color: #666;
+            font-size: 0.9rem;
+            margin: 10px 0 20px;
+            padding: 0 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>⚽ Sorteio de Grupos para Torneios</h1>
+    <div class="instructions">Insira 16 times separados por vírgula para gerar os grupos aleatórios</div>
+    
+    <div id="input-area">
+        <div class="input-wrapper">
+            <input type="text" id="team-list" placeholder="Ex: Flamengo, Corinthians, Palmeiras...">
+        </div>
+        <button onclick="sortearGrupos()">Sortear Grupos</button>
+    </div>
+    
+    <div id="error-message"></div>
+    <div id="result" class="container"></div>
+
+    <script>
+        function sortearGrupos() {
+            const errorElement = document.getElementById('error-message');
+            const input = document.getElementById('team-list').value;
+            const teams = input.split(',').map(team => team.trim()).filter(team => team !== '');
+
+            errorElement.style.display = 'none';
+
+            if (teams.length !== 16) {
+                errorElement.innerText = '❌ Por favor, insira exatamente 16 times separados por vírgula.';
+                errorElement.style.display = 'block';
+                document.getElementById('result').innerHTML = '';
+                window.scrollTo(0, 0);
+                return;
+            }
+
+            function shuffleArray(array) {
+                for (let i = array.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [array[i], array[j]] = [array[j], array[i]];
+                }
+            }
+
+            shuffleArray(teams);
+
+            const grupos = Array.from({ length: 4 }, (_, i) => 
+                teams.slice(i * 4, (i + 1) * 4)
+            );
+
+            const resultHTML = grupos.map((grupo, index) => `
+                <div class="group">
+                    <h3>Grupo ${String.fromCharCode(65 + index)}</h3>
+                    <ul>
+                        ${grupo.map(team => `<li>${team}</li>`).join('')}
+                    </ul>
+                </div>
+            `).join('');
+
+            document.getElementById('result').innerHTML = resultHTML;
+        }
+    </script>
+</body>
+
+</html>
