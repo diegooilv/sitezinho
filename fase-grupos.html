@@ -5,8 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Torneio - Fase de Grupos</title>
-    <meta name="description"
-        content="Ferramenta online para organizar a fase de grupos de torneios, campeonatos ou competições esportivas. Sorteie grupos, organize os times e prepare sua competição de forma simples e rápida!">
+    <meta name="description" content="Ferramenta para organizar torneios esportivos com fase de grupos">
     <style>
         :root {
             --primary: #2c3e50;
@@ -33,178 +32,158 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
-        }
-
-        h1,
-        h2,
-        h3 {
-            color: var(--primary);
-            margin-bottom: 1.5rem;
+            overflow-x: hidden;
         }
 
         h1 {
             text-align: center;
-            font-size: 2.5rem;
-            margin: 2rem 0;
-            letter-spacing: -0.05em;
+            font-size: 2.3rem;
+            margin: 1.5rem 0;
+            color: var(--primary);
         }
 
         .group-setup-section {
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            margin-bottom: 3rem;
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
         }
 
         .groups-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1.2rem;
+            margin: 1.5rem 0;
         }
 
         .group-input {
             background: var(--background);
-            border-radius: 12px;
-            padding: 1.5rem;
+            padding: 1rem;
+            border-radius: 8px;
         }
 
         .group-input h3 {
             color: var(--accent);
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+            margin-bottom: 0.8rem;
         }
 
         .team-input {
             width: 100%;
-            padding: 0.8rem 1rem;
-            margin: 0.5rem 0;
+            padding: 0.7rem;
+            margin: 0.3rem 0;
             border: 2px solid #dfe6e9;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .team-input:focus {
-            border-color: var(--secondary);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+            border-radius: 6px;
+            font-size: 0.95rem;
         }
 
         .matches-section {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin: 1.5rem 0;
         }
 
         .group-matches {
             background: white;
-            border-radius: 16px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
         }
 
         .match-card {
             background: var(--background);
-            border-radius: 12px;
-            padding: 1rem;
-            margin: 1rem 0;
+            padding: 0.8rem;
+            margin: 0.8rem 0;
+            border-radius: 8px;
         }
 
         .match-teams {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding: 1rem;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
             background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-        }
-
-        .team-name {
-            flex: 1;
-            text-align: center;
-            font-weight: 600;
-            color: var(--primary);
-        }
-
-        .vs {
-            color: var(--accent);
-            font-weight: 700;
-            margin: 0 1rem;
+            border-radius: 6px;
         }
 
         .match-controls {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            display: flex;
+            gap: 0.8rem;
+            margin-top: 0.5rem;
         }
 
-        select {
-            padding: 0.8rem;
-            border: 2px solid var(--secondary);
-            border-radius: 8px;
+        .selection-group {
+            flex: 1;
+        }
+
+        .selection-group h4 {
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-size: 0.9rem;
+        }
+
+        .btn-team {
+            width: 100%;
+            padding: 0.7rem;
+            border: 2px solid #ddd;
+            border-radius: 6px;
             background: white;
-            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 0.2rem 0;
+        }
+
+        .btn-team.selected {
+            border-color: var(--secondary);
+            background: #e3f2fd;
+            font-weight: 600;
+        }
+
+        .btn-extra.selected {
+            border-color: var(--accent);
+            background: #ffebee;
         }
 
         .standings-section {
             background: white;
-            border-radius: 16px;
-            padding: 2rem;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-            overflow-x: auto;
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            margin-top: 1rem;
         }
 
         .standings-table {
             width: 100%;
-            min-width: 600px;
             border-collapse: collapse;
             margin: 1rem 0;
-        }
-
-        .standings-table th,
-        .standings-table td {
-            padding: 1rem;
-            text-align: left;
-            border-bottom: 2px solid #f1f2f6;
+            min-width: 500px;
         }
 
         .standings-table th {
             background: var(--primary);
             color: white;
+            padding: 0.8rem;
         }
 
-        .qualified {
-            color: var(--secondary);
-            font-weight: 700;
+        .standings-table td {
+            padding: 0.8rem;
+            border-bottom: 1px solid #eee;
         }
 
         .btn {
             background: var(--secondary);
             color: white;
-            padding: 1rem 2rem;
+            padding: 0.9rem 1.5rem;
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
+            border-radius: 6px;
             cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
+            margin: 0.5rem 0;
+            width: 100%;
         }
 
-        .btn:hover {
-            background: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(41, 128, 185, 0.3);
-        }
-
-        @media (max-width: 1024px) {
+        @media (max-width: 768px) {
             .container {
                 padding: 15px;
             }
@@ -212,50 +191,28 @@
             h1 {
                 font-size: 2rem;
             }
-        }
 
-        @media (max-width: 768px) {
-            .group-matches {
-                padding: 1rem;
+            .groups-grid {
+                grid-template-columns: 1fr;
             }
 
             .match-teams {
                 flex-direction: column;
                 text-align: center;
-                padding: 1rem;
-            }
-
-            .vs {
-                margin: 0.5rem 0;
-            }
-
-            .match-controls {
-                grid-template-columns: 1fr;
-            }
-
-            .btn {
-                width: 100%;
-                justify-content: center;
             }
         }
 
         @media (max-width: 480px) {
             h1 {
-                font-size: 1.75rem;
-            }
-
-            .group-setup-section {
-                padding: 1.5rem;
+                font-size: 1.8rem;
             }
 
             .team-input {
-                padding: 0.7rem;
-                font-size: 0.9rem;
+                padding: 0.6rem;
             }
 
-            .standings-table th,
-            .standings-table td {
-                padding: 0.8rem;
+            .standings-table {
+                min-width: auto;
             }
         }
     </style>
@@ -265,7 +222,6 @@
     <div class="container">
         <h1>🏆 Torneio - Fase de Grupos</h1>
         <section class="group-setup-section">
-            <h2>🔧 Configurar Grupos</h2>
             <div class="groups-grid">
                 <div class="group-input">
                     <h3>Grupo A</h3>
@@ -306,12 +262,12 @@
     </div>
     <script>
         let groups = {};
+        let matchesData = {};
 
         function initializeGroups() {
             groups = {};
-            const groupInputs = document.querySelectorAll('.team-input');
-
-            groupInputs.forEach(input => {
+            matchesData = {};
+            document.querySelectorAll('.team-input').forEach(input => {
                 const group = input.dataset.group;
                 if (!groups[group]) groups[group] = [];
                 const value = input.value.trim();
@@ -319,58 +275,74 @@
                 input.style.borderColor = value ? '#dfe6e9' : '#e74c3c';
             });
 
-            let isValid = true;
-            for (const group in groups) {
-                if (groups[group].length !== 4) {
-                    isValid = false;
-                    alert(`Preencha todos os times do Grupo ${group}!`);
-                    break;
-                }
-            }
-            if (!isValid) return;
+            const isValid = Object.values(groups).every(group => group.length === 4);
+            if (!isValid) return alert('Preencha todos os times em cada grupo!');
 
             const container = document.getElementById('groupsContainer');
-            container.innerHTML = '';
-
-            Object.entries(groups).forEach(([groupName, teams]) => {
-                const groupHTML = `
+            container.innerHTML = Object.entries(groups).map(([group, teams]) => {
+                matchesData[group] = [];
+                return `
                     <div class="group-matches">
-                        <h3>Grupo ${groupName}</h3>
-                        ${generateMatchesHTML(groupName, teams)}
+                        <h3>Grupo ${group}</h3>
+                        ${getMatches(teams).map((match, i) => {
+                    const matchId = `${group}-${i}`;
+                    matchesData[group][i] = { winner: null, extra: null };
+                    return `
+                                <div class="match-card">
+                                    <div class="match-teams">
+                                        <div>${match[0]}</div>
+                                        <div>vs</div>
+                                        <div>${match[1]}</div>
+                                    </div>
+                                    <div class="match-controls">
+                                        <div class="selection-group">
+                                            <h4>Vencedor</h4>
+                                            <button class="btn-team" 
+                                                onclick="selectWinner('${group}', ${i}, '${match[0]}')"
+                                                id="${matchId}-winner1">${match[0]}</button>
+                                            <button class="btn-team" 
+                                                onclick="selectWinner('${group}', ${i}, '${match[1]}')"
+                                                id="${matchId}-winner2">${match[1]}</button>
+                                        </div>
+                                        <div class="selection-group">
+                                            <h4>Ponto Extra</h4>
+                                            <button class="btn-team btn-extra" 
+                                                onclick="selectExtra('${group}', ${i}, '${match[0]}')"
+                                                id="${matchId}-extra1">${match[0]}</button>
+                                            <button class="btn-team btn-extra" 
+                                                onclick="selectExtra('${group}', ${i}, '${match[1]}')"
+                                                id="${matchId}-extra2">${match[1]}</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                }).join('')}
                     </div>
                 `;
-                container.innerHTML += groupHTML;
-            });
+            }).join('');
 
             document.getElementById('standings').style.display = 'block';
-            window.scrollTo({ top: document.getElementById('groupsContainer').offsetTop, behavior: 'smooth' });
         }
 
-        function generateMatchesHTML(groupName, teams) {
-            return getGroupMatches(teams).map((match, index) => `
-                <div class="match-card">
-                    <div class="match-teams">
-                        <div class="team-name">${match[0]}</div>
-                        <div class="vs">vs</div>
-                        <div class="team-name">${match[1]}</div>
-                    </div>
-                    <div class="match-controls">
-                        <select id="${groupName}-match${index}-winner">
-                            <option value="">Vencedor</option>
-                            <option value="${match[0]}">${match[0]}</option>
-                            <option value="${match[1]}">${match[1]}</option>
-                        </select>
-                        <select id="${groupName}-match${index}-extra">
-                            <option value="">Ponto Extra</option>
-                            <option value="${match[0]}">${match[0]}</option>
-                            <option value="${match[1]}">${match[1]}</option>
-                        </select>
-                    </div>
-                </div>
-            `).join('');
+        function selectWinner(group, matchIndex, team) {
+            const matchId = `${group}-${matchIndex}`;
+            document.querySelectorAll(`[id^="${matchId}-winner"]`).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            matchesData[group][matchIndex].winner = team;
         }
 
-        function getGroupMatches(teams) {
+        function selectExtra(group, matchIndex, team) {
+            const matchId = `${group}-${matchIndex}`;
+            document.querySelectorAll(`[id^="${matchId}-extra"]`).forEach(btn => {
+                btn.classList.remove('selected');
+            });
+            event.target.classList.add('selected');
+            matchesData[group][matchIndex].extra = team;
+        }
+
+        function getMatches(teams) {
             const matches = [];
             for (let i = 0; i < teams.length; i++) {
                 for (let j = i + 1; j < teams.length; j++) {
@@ -384,61 +356,42 @@
             const standings = {};
             let hasError = false;
 
-            Object.entries(groups).forEach(([groupName, teams]) => {
-                const groupStandings = {};
-                teams.forEach(team => groupStandings[team] = { points: 0, extraPoints: 0 });
+            Object.entries(matchesData).forEach(([group, matches]) => {
+                const groupData = groups[group].reduce((acc, team) => {
+                    acc[team] = { points: 0, extra: 0 };
+                    return acc;
+                }, {});
 
-                const matches = getGroupMatches(teams);
                 matches.forEach((match, index) => {
-                    const winnerSelect = document.getElementById(`${groupName}-match${index}-winner`);
-                    const extraSelect = document.getElementById(`${groupName}-match${index}-extra`);
-
-                    if (!winnerSelect.value || !extraSelect.value) {
-                        winnerSelect.style.borderColor = '#e74c3c';
-                        extraSelect.style.borderColor = '#e74c3c';
+                    if (!match.winner || !match.extra) {
                         hasError = true;
+                        document.querySelector(`[id^="${group}-${index}-winner"]`).parentElement.parentElement.style.border = '2px solid #e74c3c';
                         return;
                     }
-
-                    groupStandings[winnerSelect.value].points += 1;
-                    groupStandings[extraSelect.value].extraPoints += 1;
+                    groupData[match.winner].points += 1;
+                    groupData[match.extra].extra += 1;
                 });
 
-                standings[groupName] = Object.entries(groupStandings)
-                    .sort((a, b) => b[1].points - a[1].points || b[1].extraPoints - a[1].extraPoints);
+                standings[group] = Object.entries(groupData).sort((a, b) =>
+                    b[1].points - a[1].points || b[1].extra - a[1].extra);
             });
 
-            if (hasError) {
-                alert('Preencha todos os resultados!');
-                return;
-            }
+            if (hasError) return alert('Preencha todos os resultados!');
 
-            displayStandings(standings);
-        }
-
-        function displayStandings(standings) {
-            const container = document.getElementById('standingsTables');
-            container.innerHTML = Object.entries(standings).map(([groupName, teams]) => `
-                <h3>Grupo ${groupName}</h3>
+            document.getElementById('standingsTables').innerHTML = Object.entries(standings).map(([group, data]) => `
+                <h3>Grupo ${group}</h3>
                 <table class="standings-table">
-                    <tr>
-                        <th>Pos</th>
-                        <th>Time</th>
-                        <th>Pontos</th>
-                        <th>Desempate</th>
-                    </tr>
-                    ${teams.map(([team, data], index) => `
+                    <tr><th>Pos</th><th>Time</th><th>Pontos</th><th>Extra</th></tr>
+                    ${data.map(([team, stats], i) => `
                         <tr>
-                            <td>${index + 1}</td>
-                            <td>${team} ${index < 2 ? '✅' : ''}</td>
-                            <td>${data.points}</td>
-                            <td>${data.extraPoints}</td>
+                            <td>${i + 1}</td>
+                            <td>${team} ${i < 2 ? '✅' : ''}</td>
+                            <td>${stats.points}</td>
+                            <td>${stats.extra}</td>
                         </tr>
                     `).join('')}
                 </table>
             `).join('');
-
-            window.scrollTo({ top: document.getElementById('standings').offsetTop, behavior: 'smooth' });
         }
     </script>
 </body>
