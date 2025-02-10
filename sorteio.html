@@ -19,13 +19,17 @@
             padding: 15px;
             background-color: #f8f9fa;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
         h1 {
             text-align: center;
             color: var(--primary-color);
             font-size: 1.8rem;
-            margin: 20px 0;
+            margin: 10px 0;
+            width: 100%;
         }
 
         .container {
@@ -33,7 +37,9 @@
             grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
             gap: 15px;
             max-width: 1200px;
-            margin: 0 auto;
+            width: 100%;
+            margin: 20px 0;
+            justify-items: center;
         }
 
         .group {
@@ -42,6 +48,8 @@
             padding: 15px;
             box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
             transition: transform 0.2s;
+            width: 100%;
+            max-width: 300px;
         }
 
         .group:hover {
@@ -54,12 +62,14 @@
             font-size: 1.3rem;
             padding-bottom: 10px;
             border-bottom: 2px solid #eee;
+            text-align: center;
         }
 
         .group ul {
             list-style: none;
             padding: 0;
             margin: 0;
+            text-align: center;
         }
 
         .group ul li {
@@ -69,33 +79,32 @@
         }
 
         #input-area {
+            width: 100%;
             max-width: 600px;
-            margin: 20px auto;
+            margin: 10px 0;
             padding: 0 15px;
         }
 
-        .input-wrapper {
-            position: relative;
-            margin-bottom: 15px;
-        }
-
-        input {
+        textarea {
             width: 100%;
-            padding: 12px;
+            padding: 16px;
+            font-size: 1.1rem;
             border: 2px solid #ddd;
             border-radius: 8px;
-            font-size: 1rem;
-            transition: border-color 0.3s;
+            min-height: 120px;
+            resize: vertical;
+            margin-bottom: 15px;
+            box-sizing: border-box;
         }
 
-        input:focus {
+        textarea:focus {
             outline: none;
             border-color: var(--secondary-color);
         }
 
         button {
             width: 100%;
-            padding: 14px;
+            padding: 16px;
             background-color: var(--secondary-color);
             color: white;
             border: none;
@@ -118,6 +127,17 @@
             background-color: #f8d7da;
             border-radius: 6px;
             display: none;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .instructions {
+            text-align: center;
+            color: #666;
+            font-size: 1rem;
+            margin: 10px 0 20px;
+            padding: 0 15px;
+            max-width: 600px;
         }
 
         @media (max-width: 480px) {
@@ -125,26 +145,20 @@
                 font-size: 1.5rem;
             }
 
-            input {
-                font-size: 0.95rem;
+            textarea {
+                font-size: 1rem;
+                padding: 12px;
+                min-height: 100px;
             }
 
             button {
-                padding: 12px;
+                padding: 14px;
                 font-size: 1rem;
             }
 
             .group h3 {
                 font-size: 1.2rem;
             }
-        }
-
-        .instructions {
-            text-align: center;
-            color: #666;
-            font-size: 0.9rem;
-            margin: 10px 0 20px;
-            padding: 0 15px;
         }
     </style>
 </head>
@@ -154,9 +168,7 @@
     <div class="instructions">Insira 16 times separados por vírgula para gerar os grupos aleatórios</div>
     
     <div id="input-area">
-        <div class="input-wrapper">
-            <input type="text" id="team-list" placeholder="Ex: Flamengo, Corinthians, Palmeiras...">
-        </div>
+        <textarea id="team-list" placeholder="Ex: Flamengo, Corinthians, Palmeiras, Grêmio, Internacional, São Paulo, Santos, Atlético-MG, Cruzeiro, Fluminense, Vasco, Botafogo, Bahia, Fortaleza, Sport, Coritiba"></textarea>
         <button onclick="sortearGrupos()">Sortear Grupos</button>
     </div>
     
