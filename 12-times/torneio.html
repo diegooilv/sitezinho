@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Simulador de torneio com fase de grupos e mata-mata">
+    <title>Simulador de Torneio</title>
+    <meta name="description"
+        content="Ferramenta online para organizar e gerenciar a fase de mata-mata de torneios, campeonatos ou competições esportivas. Faça os sorteios, acompanhe os resultados e determine o campeão de forma prática!">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f0f2f5;
+            padding: 20px;
+        }
+
+        h1,
+        h2,
+        h3 {
+            color: #1a1a1a;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            color: #2c3e50;
+            margin: 2rem 0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .phase-container {
+            background: white;
+            border-radius: 12px;
+            padding: 2rem;
+            margin: 2rem 0;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .group-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .group {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .group h3 {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 0.8rem;
+            margin: 0.5rem 0;
+            border: 2px solid #3498db;
+            border-radius: 6px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #2980b9;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            width: 100%;
+            max-width: 300px;
+            margin: 1rem auto;
+        }
+
+        button:hover {
+            background: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .matches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .match {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .match h3 {
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .winner {
+            text-align: center;
+            font-size: 2rem;
+            color: #27ae60;
+            padding: 2rem;
+            font-weight: bold;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .group-grid,
+            .matches-grid {
+                grid-template-columns: 1fr;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Simulador de Torneio</h1>
+        <div class="phase-container" id="groupPhase">
+            <h2>Fase de Grupos</h2>
+            <div class="group-grid">
+                <div class="group">
+                    <h3>Grupo A</h3>
+                    <input type="text" id="teamA1" placeholder="Time 1" required>
+                    <input type="text" id="teamA2" placeholder="Time 2" required>
+                    <input type="text" id="teamA3" placeholder="Time 3" required>
+                    <input type="text" id="teamA4" placeholder="Time 4" required>
+                </div>
+                <div class="group">
+                    <h3>Grupo B</h3>
+                    <input type="text" id="teamB1" placeholder="Time 1" required>
+                    <input type="text" id="teamB2" placeholder="Time 2" required>
+                    <input type="text" id="teamB3" placeholder="Time 3" required>
+                    <input type="text" id="teamB4" placeholder="Time 4" required>
+                </div>
+                <div class="group">
+                    <h3>Grupo C</h3>
+                    <input type="text" id="teamC1" placeholder="Time 1" required>
+                    <input type="text" id="teamC2" placeholder="Time 2" required>
+                    <input type="text" id="teamC3" placeholder="Time 3" required>
+                    <input type="text" id="teamC4" placeholder="Time 4" required>
+                </div>
+                <div class="group">
+                    <h3>Grupo Repescagem</h3>
+                    <input type="text" id="teamD1" placeholder="Time 1" required>
+                    <input type="text" id="teamD2" placeholder="Time 2" required>
+                    <input type="text" id="teamD3" placeholder="Time 3" required>
+                    <input type="text" id="teamD4" placeholder="Time 4" required>
+                </div>
+            </div>
+            <button onclick="startKnockoutPhase()">Gerar Fase Mata-Mata</button>
+        </div>
+        <div class="phase-container" id="knockoutPhase" style="display: none;">
+            <h2>Quartas de Final</h2>
+            <div class="matches-grid">
+                <div class="match">
+                    <h3 id="quarter1"></h3>
+                    <input type="text" id="quarter1Result" placeholder="Vencedor">
+                </div>
+                <div class="match">
+                    <h3 id="quarter2"></h3>
+                    <input type="text" id="quarter2Result" placeholder="Vencedor">
+                </div>
+                <div class="match">
+                    <h3 id="quarter3"></h3>
+                    <input type="text" id="quarter3Result" placeholder="Vencedor">
+                </div>
+                <div class="match">
+                    <h3 id="quarter4"></h3>
+                    <input type="text" id="quarter4Result" placeholder="Vencedor">
+                </div>
+            </div>
+            <button onclick="startSemifinals()">Gerar Semifinais</button>
+        </div>
+        <div class="phase-container" id="semifinalPhase" style="display: none;">
+            <h2>Semifinais</h2>
+            <div class="matches-grid">
+                <div class="match">
+                    <h3 id="semifinal1"></h3>
+                    <input type="text" id="semifinal1Result" placeholder="Vencedor">
+                </div>
+                <div class="match">
+                    <h3 id="semifinal2"></h3>
+                    <input type="text" id="semifinal2Result" placeholder="Vencedor">
+                </div>
+            </div>
+            <button onclick="startFinal()">Gerar Final</button>
+        </div>
+        <div class="phase-container" id="finalPhase" style="display: none;">
+            <h2>Final</h2>
+            <div class="match">
+                <h3 id="finalMatch"></h3>
+                <input type="text" id="finalResult" placeholder="Campeão">
+            </div>
+            <button onclick="showChampion()">Mostrar Campeão</button>
+        </div>
+        <div id="champion" class="winner" style="display: none;"></div>
+    </div>
+    <script>
+        let tournamentData = {
+            groups: {},
+            knockout: {
+                quarters: [],
+                semis: [],
+                final: []
+            }
+        };
+
+        function startKnockoutPhase() {
+
+            const groups = ['A', 'B', 'C', 'D'].map(group => ({
+                name: group,
+                teams: Array.from({ length: 4 }, (_, i) =>
+                    document.getElementById(`team${group}${i + 1}`).value.trim())
+            }));
+
+
+            if (groups.some(g => g.teams.some(t => t === ''))) {
+                alert('Preencha todos os times dos grupos!');
+                return;
+            }
+
+
+            groups.forEach(g => tournamentData.groups[g.name] = g.teams);
+
+
+            const quarters = [
+                `${tournamentData.groups.A[0]} vs ${tournamentData.groups.B[1]}`,
+                `${tournamentData.groups.B[0]} vs ${tournamentData.groups.A[1]}`,
+                `${tournamentData.groups.C[0]} vs ${tournamentData.groups.D[1]}`,
+                `${tournamentData.groups.D[0]} vs ${tournamentData.groups.C[1]}`
+            ];
+
+
+            quarters.forEach((q, i) => {
+                document.getElementById(`quarter${i + 1}`).textContent = q;
+                tournamentData.knockout.quarters[i] = q.split(' vs ');
+            });
+
+            document.getElementById('groupPhase').style.display = 'none';
+            document.getElementById('knockoutPhase').style.display = 'block';
+        }
+
+        function startSemifinals() {
+            const quarters = tournamentData.knockout.quarters;
+            const semifinals = [];
+
+            for (let i = 0; i < 4; i++) {
+                const winner = document.getElementById(`quarter${i + 1}Result`).value.trim();
+                const [team1, team2] = quarters[i];
+
+                if (winner !== team1 && winner !== team2) {
+                    alert(`Resultado inválido para quartas ${i + 1}! Digite "${team1}" ou "${team2}"`);
+                    return;
+                }
+                semifinals.push(winner);
+            }
+
+
+            tournamentData.knockout.semis = [
+                `${semifinals[0]} vs ${semifinals[1]}`,
+                `${semifinals[2]} vs ${semifinals[3]}`
+            ];
+
+            tournamentData.knockout.semis.forEach((s, i) => {
+                document.getElementById(`semifinal${i + 1}`).textContent = s;
+            });
+
+            document.getElementById('knockoutPhase').style.display = 'none';
+            document.getElementById('semifinalPhase').style.display = 'block';
+        }
+
+        function startFinal() {
+            const semis = tournamentData.knockout.semis.map(s => s.split(' vs '));
+            const finalists = [];
+
+            for (let i = 0; i < 2; i++) {
+                const winner = document.getElementById(`semifinal${i + 1}Result`).value.trim();
+                const [team1, team2] = semis[i];
+
+                if (winner !== team1 && winner !== team2) {
+                    alert(`Resultado inválido para semifinal ${i + 1}! Digite "${team1}" ou "${team2}"`);
+                    return;
+                }
+                finalists.push(winner);
+            }
+
+            tournamentData.knockout.final = `${finalists[0]} vs ${finalists[1]}`;
+            document.getElementById('finalMatch').textContent = tournamentData.knockout.final;
+
+            document.getElementById('semifinalPhase').style.display = 'none';
+            document.getElementById('finalPhase').style.display = 'block';
+        }
+
+        function showChampion() {
+            const champion = document.getElementById('finalResult').value.trim();
+            const [team1, team2] = tournamentData.knockout.final.split(' vs ');
+
+            if (champion !== team1 && champion !== team2) {
+                alert(`Digite um dos finalistas: "${team1}" ou "${team2}"`);
+                return;
+            }
+
+            document.getElementById('champion').textContent = `🏆 CAMPEÃO: ${champion} 🏆`;
+            document.getElementById('champion').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
